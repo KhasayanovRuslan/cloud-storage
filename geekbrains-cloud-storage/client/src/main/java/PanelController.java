@@ -5,10 +5,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.FileSystems;
@@ -35,11 +33,11 @@ public class PanelController implements Initializable {
         fileTypeColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getType().getName()));
         fileTypeColumn.setPrefWidth(24);
 
-        TableColumn<FileInfo, String> filenameColumn = new TableColumn<>("Имя");
+        TableColumn<FileInfo, String> filenameColumn = new TableColumn<>("Name");
         filenameColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getFilename()));
         filenameColumn.setPrefWidth(240);
 
-        TableColumn<FileInfo, Long> fileSizeColumn = new TableColumn<>("Размер");
+        TableColumn<FileInfo, Long> fileSizeColumn = new TableColumn<>("Size");
         fileSizeColumn.setCellValueFactory(param -> new SimpleObjectProperty<>(param.getValue().getSize()));
         fileSizeColumn.setCellFactory(column -> {
             return new TableCell<FileInfo, Long>() {
@@ -62,7 +60,7 @@ public class PanelController implements Initializable {
         fileSizeColumn.setPrefWidth(120);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        TableColumn<FileInfo, String> fileDateColumn = new TableColumn<>("Дата изменения");
+        TableColumn<FileInfo, String> fileDateColumn = new TableColumn<>("Date of change");
         fileDateColumn.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().getLastModified().format(dtf)));
         fileDateColumn.setPrefWidth(120);
 

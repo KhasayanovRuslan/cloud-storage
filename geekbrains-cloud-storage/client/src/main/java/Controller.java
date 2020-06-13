@@ -10,9 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Controller {
-    private ClientMain client;
-    private ServerMain server;
-    
+    private Handler handler;
+
     @FXML
     VBox leftPanel, rightPanel;
 
@@ -20,7 +19,7 @@ public class Controller {
         Platform.exit();
     }
 
-    public void copyBtnAction(ActionEvent actionEvent) {
+    public void downloadBtnAction(ActionEvent actionEvent) {
         PanelController leftPC = (PanelController) leftPanel.getProperties().get("ctrl");
         PanelController rightPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
@@ -44,13 +43,17 @@ public class Controller {
         Path dstPath = Paths.get(dstPC.getCurrentPath()).resolve(srcPath.getFileName().toString());
 
         try {
-            client.sendFile(srcPath);
-            server.downloadFile(dstPath);
+//            handler.sendFile(srcPath);
+//            handler.receiveFile(dstPath);
             //Files.copy(srcPath, dstPath);
             dstPC.updateList(Paths.get(dstPC.getCurrentPath()));
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Не удалось скопировать указанный файл", ButtonType.OK);
             alert.showAndWait();
         }
+    }
+
+    public void deleteBtnAction(ActionEvent actionEvent) {
+
     }
 }

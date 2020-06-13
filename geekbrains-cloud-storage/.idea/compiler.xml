@@ -8,7 +8,11 @@
         <outputRelativeToContentRoot value="true" />
         <module name="client" />
         <module name="server" />
+        <module name="handler" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="Hadler" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

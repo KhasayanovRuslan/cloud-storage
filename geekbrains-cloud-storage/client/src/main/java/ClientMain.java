@@ -1,42 +1,29 @@
-import java.io.*;
-import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class ClientMain {
-    private Socket socket;
-    private DataInputStream in;
-    private DataOutputStream out;
+import java.io.IOException;
 
-    public ClientMain() {
-        try {
-            socket = new Socket("localhost", 8189);
+public class ClientMain extends Application {
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+        Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
+        primaryStage.setTitle("Java-Cloud-Storage [GeekBrains]");
+        primaryStage.setScene(new Scene(root, 1280, 600));
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+
+        try(Handler handler = new Handler("127.0.0.1", 8189)) {
             System.out.println("Connected to server");
-
-            in = new DataInputStream(socket.getInputStream());
-            out = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
-
-    public void sendFile(Path path) throws IOException {
-        String fileName = path.toString();
-        File file = new File(fileName);
-
-        //out.writeUTF("fileName");
-        out.writeLong(file.length());
-
-        FileInputStream fis = new FileInputStream(file);
-        //byte [] buffer = new byte[8192];
-        int x;
-        while ((x = fis.read()) != -1) {
-            out.write(x);
+        catch(IOException e) {
+            throw new RuntimeException(e);
         }
-        fis.close();
-    }
-
-    public static void main(String[] args) throws IOException {
-        new ClientMain();
     }
 }
+          
