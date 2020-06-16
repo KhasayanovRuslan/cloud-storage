@@ -1,23 +1,80 @@
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Scanner;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ServerMain {
-    public static void main(String[] args) {
-        try(ServerSocket server = new ServerSocket(8189)) {
+    private static boolean isRunning = true;
+    public ConcurrentLinkedDeque<Handler> clients;
+
+    public ConcurrentLinkedDeque<Handler> getClients() {
+        return clients;
+    }
+
+    public static void stop() {
+        isRunning = false;
+    }
+
+    public void removeFromClientsList(Handler handler) {
+        clients.remove(handler);
+    }
+
+    public void startServer() {
+        clients = new ConcurrentLinkedDeque<>();
+
+        try (ServerSocket server = new ServerSocket(8189)) {
             System.out.println("Server started!");
-
-            while(true)
-                try(Handler handler = new Handler(server)) {
-
-                }
-                catch (IOException e) {
+            while (isRunning) {
+                try (Handler handler = new Handler(server)) {
+                    new Thread(handler).start();
+                    clients.add(handler);
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-        }
-        catch(IOException e) {
-            throw new RuntimeException(e);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+    public static void main(String[] args) {
+        new Thread(() -> {
+            Scanner in = new Scanner(System.in);
+            while (true) {
+                String command = in.next();
+                if (command.equals("quit")) {
+                    stop();
+                    break;
+                }
+            }
+        }).start();
+        new ServerMain().startServer();
+    }
+}
+
+
+//        try(ServerSocket server = new ServerSocket(8189)) {
+//            System.out.println("Server started!");
+//
+//            while(true)
+//                try(Handler handler = new Handler(server)) {
+//
+//                }
+//                catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+//        }
+//        catch(IOException e) {
+//            throw new RuntimeException(e);
+//        }
+
+
+    //                    if (handler.readSignal() == "File transferred" ) {
+//                        handler.receiveFile();
+//                    }
+//                    else {
+//                        handler.sendFile();
+//                    }
 
 //    private ServerSocket server;
 //    private Socket socket;
@@ -63,4 +120,4 @@ public class ServerMain {
 //    public static void main(String[] args) throws IOException {
 //        new ServerMain();
 //    }
-}
+
