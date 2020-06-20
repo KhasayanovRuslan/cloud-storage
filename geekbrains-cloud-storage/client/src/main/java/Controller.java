@@ -6,20 +6,27 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class Controller {
+//    private ArrayList<String> commandsAndFileName = new ArrayList<>();
+//    private CreateFileNameAndCommands fnc;
+//
+//    private ArrayList<String> commands;
+//    private ArrayList<String> fileNameList;
     //private Handler handler;
-    ArrayList<String> commands = new ArrayList<>();
-    ArrayList<String> fileNameList = new ArrayList<>();
 
-    public ArrayList<String> getCommands() {
-        return commands;
-    }
+//    public Controller() {
+//        commands = new ArrayList<>();
+//        fileNameList = new ArrayList<>();
+//    }
 
-    public ArrayList<String> getFileNameList() {
-        return fileNameList;
-    }
+//    public ArrayList<String> getCommands() {
+//        return commands;
+//    }
+//
+//    public ArrayList<String> getFileNameList() {
+//        return fileNameList;
+//    }
 
     @FXML
     VBox leftPanel, rightPanel;
@@ -61,15 +68,29 @@ public class Controller {
             dstPC = clientPC;
         }
 
-        if (srcPC == clientPC) {
-            commands.add(0,"send");
-        }
-        else {
-            commands.add(0,"receive");
-        }
+//        if (clientPC.getSelectedFilename() != null) {
+//            commandsAndFileName.add(0,"send");
+//            String fileName = clientPC.getSelectedFilename();
+//            commandsAndFileName.add(1, fileName);
+//        }
+//        else {
+//            commandsAndFileName.add(0,"receive");
+//            String fileName = serverPC.getSelectedFilename();
+//            commandsAndFileName.add(1, fileName);
+//        }
 
-        String fileName = srcPC.getSelectedFilename();
-        fileNameList.add(0, fileName);
+//        fnc = new CreateFileNameAndCommands(commandsAndFileName);
+
+
+//        if (srcPC == clientPC) {
+//            commands.add(0,"send");
+//        }
+//        else {
+//            commands.add(0,"receive");
+//        }
+
+//        String fileName = srcPC.getSelectedFilename();
+//        fileNameList.add(0, fileName);
 
 //        ArrayList<String> commands = new ArrayList<>();
 //        commands.add("Send");

@@ -7,7 +7,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ClientMain extends Application {
-    private Controller cr = null;
+//    private PanelController data;
+//    private Controller cr = new Controller();
     private static boolean isRunning = true;
 
     public void stop() {
@@ -21,9 +22,12 @@ public class ClientMain extends Application {
             while (isRunning) {
                 try {
                     while (isRunning) {
-                        String command = cr.getCommands().get(0);
+//                        String command = cr.getCommands().get(0);
+                        String command = data.getCommandsAndFileName().get(0);
                         if (command.equals("send")) {
                             handler.out.writeUTF(command);
+                            String fileName = data.getCommandsAndFileName().get(1);
+                            handler.out.writeUTF(fileName);
                         }
                         if (command.equals("receive")) {
                             handler.out.writeUTF(command);
@@ -31,10 +35,12 @@ public class ClientMain extends Application {
 
                         String response = handler.in.readUTF();
                         if (response == "File transferred") {
-                            handler.receiveFile();
+                            command = "receive";
+//                            handler.receiveFile();
                         }
                         else {
-                            handler.sendFile();
+                            command = "send";
+//                            handler.sendFile();
                         }
                     }
                 }
