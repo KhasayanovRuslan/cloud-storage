@@ -18,6 +18,10 @@ import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class PanelController implements Initializable {
+//    private Socket socket;
+//    private DataInputStream in;
+//    private DataOutputStream out;
+
     @FXML
     TableView<FileInfo> filesTable;
 
@@ -122,6 +126,4 @@ public class PanelController implements Initializable {
     public String getCurrentPath() {
         return pathField.getText();
     }
-
-
 }

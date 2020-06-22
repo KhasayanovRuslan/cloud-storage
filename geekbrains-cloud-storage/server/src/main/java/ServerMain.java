@@ -1,9 +1,10 @@
-import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ServerMain {
+    private Socket socket;
     private static boolean isRunning = true;
     public ConcurrentLinkedDeque<Handler> clients;
 
@@ -22,15 +23,14 @@ public class ServerMain {
     public void startServer() {
         clients = new ConcurrentLinkedDeque<>();
 
-        try (ServerSocket server = new ServerSocket(8189)) {
+        try(ServerSocket server = new ServerSocket(8000)) {
             System.out.println("Server started!");
             while (isRunning) {
-                try (Handler handler = new Handler(server)) {
-                    new Thread(handler).start();
-                    clients.add(handler);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                socket = server.accept();
+                System.out.println("Client with ip: " + socket.getInetAddress() + " accepted!");
+                Handler handler = new Handler(this, socket);
+                new Thread(handler).start();
+                clients.add(handler);
             }
         } catch (Exception e) {
             e.printStackTrace();
