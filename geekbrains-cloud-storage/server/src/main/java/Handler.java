@@ -7,7 +7,7 @@ public class Handler implements Runnable {
     private ServerMain server;
     private Socket socket;
     private boolean isRunning = true;
-    private final int COMMAND = 0, SEND = 1, RECEIVE = 2;
+    private final int COMMAND = 0, SEND = 1, RECEIVE = 2, DELETE = 3;
     private int currentOption;
 //    private String serverPath = "server-files";
     //private String clientPath = "client-files";
@@ -42,6 +42,10 @@ public class Handler implements Runnable {
                     if (command.equals("send")) {
                         System.out.println("command send!");
                         currentOption = SEND;
+                    }
+                    if (command.equals("delete")) {
+                        System.out.println("command delete!");
+                        currentOption = DELETE;
                     }
                 }
                 if (currentOption == SEND) {
@@ -87,21 +91,41 @@ public class Handler implements Runnable {
                     }
 
                     FileOutputStream fos = new FileOutputStream(file);
-                    byte[] buffer = new byte[8192];
-                    for (int i = 0; i < length / 8192; i++) {
-                        int read = in.read(buffer);
-                        fos.write(buffer, 0, read);
+//                    byte[] buffer = new byte[8192];
+                    for (long i = 0; i < length; i++) {
+                        fos.write(in.read());
+//                        int read = in.read(buffer);
+//                        fos.write(buffer, 0, read);
                     }
                     fos.close();
                     currentOption = COMMAND;
 
 //                    out.writeUTF("File received");
                 }
+                if (currentOption == DELETE) {
+                    String fileName = in.readUTF();
+                    System.out.println("fileName: " + fileName);
+
+                    File file = new File(fileName);
+                    boolean del = file.delete();
+
+                    currentOption = COMMAND;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                in.close();
+                out.close();
+                socket.close();
+            }
+            catch(IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
+
 }
 
 //    public Handler(String ip, int port) {

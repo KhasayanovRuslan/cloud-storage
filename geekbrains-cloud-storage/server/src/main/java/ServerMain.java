@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class ServerMain {
     private Socket socket;
+    private Handler handler;
     private static boolean isRunning = true;
     public ConcurrentLinkedDeque<Handler> clients;
 
@@ -28,7 +29,7 @@ public class ServerMain {
             while (isRunning) {
                 socket = server.accept();
                 System.out.println("Client with ip: " + socket.getInetAddress() + " accepted!");
-                Handler handler = new Handler(this, socket);
+                handler = new Handler(this, socket);
                 new Thread(handler).start();
                 clients.add(handler);
             }

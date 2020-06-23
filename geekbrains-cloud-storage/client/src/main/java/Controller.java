@@ -6,14 +6,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.VBox;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class Controller implements Initializable, Closeable {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
@@ -67,7 +65,45 @@ public class Controller implements Initializable {
     }
 
     public void deleteBtnAction(ActionEvent actionEvent) {
+        PanelController clientPC = (PanelController) leftPanel.getProperties().get("ctrl");
+        PanelController serverPC = (PanelController) rightPanel.getProperties().get("ctrl");
 
+        if (clientPC.getSelectedFilename() == null && serverPC.getSelectedFilename() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Ни один файл не был выбран", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+
+        try {
+            if (clientPC.getSelectedFilename() != null) {
+                String command = "delete";
+                out.writeUTF(command);
+                String fileName = "clients-files/" + clientPC.getSelectedFilename();
+                out.writeUTF(fileName);
+            }
+
+            if  (serverPC.getSelectedFilename() != null) {
+                String command = "delete";
+                out.writeUTF(command);
+                String fileName = "server-files/" + serverPC.getSelectedFilename();
+                out.writeUTF(fileName);
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    @Override
+    public void close() {
+        try{
+            in.close();
+            out.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
